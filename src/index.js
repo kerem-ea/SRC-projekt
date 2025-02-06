@@ -1,10 +1,11 @@
 let points = [];
 let player;
 let platform;
+let t = 0;
 
 const config = {
-    frameRate: 60,
-    backgroundColor: [255, 0, 0],
+    frameRate: 144,
+    backgroundColor: [169, 169, 169], 
     playerColor: [0, 255, 0],
     gameSize: 0.8,
 };
@@ -14,6 +15,7 @@ function setup() {
     canvas = centerCanvas(canvas);
     config.gameWidth = width;
     config.gameHeight = height;
+    frameRate(config.frameRate);
 
     p1 = { x: Math.random() * width, y: Math.random() * height };
     p2 = { x: Math.random() * width, y: Math.random() * height };
@@ -22,21 +24,28 @@ function setup() {
 
     points = [p1, p2, p3, p4];
 
-    platform = new Platform(points, width, height);
-
-    frameRate(config.frameRate);
-    background(config.backgroundColor);
     player = new Player();
-    initializePoints();
+    platform = new Platform(points);
 }
 
 function draw() {
-    background(config.backgroundColor);
-    player.show();
-    player.move();
-    controlPoint.drawAllPoints(points); 
-    platform.showCurve();
-    playerFunctions()
+    background(config.backgroundColor); 
+    ControlPoint.drawAllPoints(points);
+
+    progress_t_Value(); 
+    playerFunctions();
+}
+
+function progress_t_Value() {
+    for (let t = 0; t <= 1; t += 0.002) {
+        let bezierPoint = platform.calculateBezierCurve(t);
+        fill(255, 0, 255);  
+        circle(bezierPoint.x, bezierPoint.y, width * 0.015);  
+
+        let normalizedPoint = platform.normalizeBezierCurve(t);
+        fill(255, 0, 0);  
+        circle(normalizedPoint.x * width, normalizedPoint.y * height, width * 0.03);  
+    }
 }
 
 function centerCanvas(canvas) {
@@ -46,14 +55,8 @@ function centerCanvas(canvas) {
     return canvas;
 }
 
-function initializePoints() {
-    points.push(new controlPoint());
-    points.push(new controlPoint());
-}
 function playerFunctions() {
     player.move();
-    player.handleGravity();
+    player.applyGravity();
     player.show();
-    player.isOnPlatform(); 
-    player.outOfBounds();
 }
