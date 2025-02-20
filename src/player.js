@@ -10,7 +10,7 @@ class Player {
   }
 
   update(platforms) {
-      this.acc.set(0, 1);  // Apply gravity
+      this.acc.set(0, 1);  
 
       if (keyIsDown(LEFT_ARROW)) this.acc.x = -1;
       if (keyIsDown(RIGHT_ARROW)) this.acc.x = 1;
@@ -24,7 +24,7 @@ class Player {
       this.pos.add(this.vel);
 
       this.onGround = false;
-      // Corrected: Ensure checkCollisions is on a valid platform
+
       for (let i = 0; i < platforms.length; i++) {
           let platform = platforms[i];
           if (platform instanceof BezierPlatform && platform.checkCollisions(this)) {
@@ -36,16 +36,6 @@ class Player {
       this.vel.x *= 0.9;
       this.pos.x = constrain(this.pos.x, 0, this.canvasWidth);
   }
-  
-    checkCollisions(platforms) {
-      for (let i = 0; i < platforms.length; i++) {
-        if (platforms[i].checkCollisions(this)) {
-          return true;
-        }
-      }
-      return false;
-    }
-    
 
     updateMovement() {
       if (keyIsDown(LEFT_ARROW)) {
@@ -59,14 +49,6 @@ class Player {
         this.vel.y = -15;
         this.onGround = false;
       }
-    }
-  
-    applyGravity() {
-      this.acc.y += 1.0;
-    }
-  
-    checkBoundaries() {
-      this.pos.x = constrain(this.pos.x, 0, this.canvasWidth);
     }
   
     display(cameraOffset) {

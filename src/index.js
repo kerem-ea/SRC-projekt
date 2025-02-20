@@ -99,19 +99,12 @@ const config = {
     }
   
     checkGameOver() {
-      if (this.player.pos.y > this.canvasHeight || this.energy <= 0) {
+      if (this.player.pos.y > this.canvasHeight) {
         this.state = "gameOver";
       }
     }
   
-    handlePlatformInteraction(platform) {
-      this.energy += 10;
-      if (this.energy > 100) {
-        this.energy = 100;
-      }
-    }
-  
-    // Added a restart method for when the "R" key is pressed.
+    
     restart() {
       this.state = "playing";
       this.energy = 100;

@@ -6,7 +6,6 @@ class BezierPlatform {
       this.p3 = new ControlPoint(points.p3.x, points.p3.y, this);
       this.p4 = new ControlPoint(points.p4.x, points.p4.y, this);
       this.energy = initialEnergy;
-      this.floorCounted = false;
       this.originalCenter = this.getBezierPoint(0.5);
       this.points = this.calculatePoints();
     }
@@ -89,13 +88,6 @@ class BezierPlatform {
     
     getBezierPoint(t) {
       return customBezier(this.p1.pos, this.p2.pos, this.p3.pos, this.p4.pos, t);
-    }
-  
-    calculateEnergy() {
-      const currentCenter = this.getBezierPoint(0.5);
-      const deviation = dist(this.originalCenter.x, this.originalCenter.y, currentCenter.x, currentCenter.y);
-      const normalizedDeviation = deviation / this.game.canvasWidth;
-      this.energy = Math.max(0, 100 - (normalizedDeviation * 300));
     }
   }
   
