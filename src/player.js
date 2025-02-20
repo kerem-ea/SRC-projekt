@@ -36,20 +36,6 @@ class Player {
       this.vel.x *= 0.9;
       this.pos.x = constrain(this.pos.x, 0, this.canvasWidth);
   }
-
-    updateMovement() {
-      if (keyIsDown(LEFT_ARROW)) {
-        this.acc.x = -1;
-      }
-      if (keyIsDown(RIGHT_ARROW)) {
-        this.acc.x = 1;
-      }
-      // Jump only if on the ground.
-      if (keyIsDown(UP_ARROW) && this.onGround) {
-        this.vel.y = -15;
-        this.onGround = false;
-      }
-    }
   
     display(cameraOffset) {
       push();
