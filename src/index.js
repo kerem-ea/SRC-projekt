@@ -7,39 +7,44 @@ const config = {
   
   class Game {
     constructor() {
-      this.state = "playing";
-      this.energy = 100;
-      this.floorCount = 0;
-      this.cameraOffset = 0;
-      this.dragging = null;
-      this.platforms = [];
+        this.state = "playing";
+        this.energy = 100;
+        this.floorCount = 0;
+        this.cameraOffset = 0;
+        this.dragging = null;
+        this.platforms = [];
     }
-  
+
     initialize(canvasWidth, canvasHeight) {
-      this.canvasWidth = canvasWidth;
-      this.canvasHeight = canvasHeight;
-      this.jumpHeight = canvasHeight * 0.2;
-      this.player = new Player(canvasWidth / 2, canvasHeight / 2 - 50, canvasWidth, canvasHeight);
-      this.platforms = [];
-      this.generateInitialPlatforms();
+        this.canvasWidth = canvasWidth;
+        this.canvasHeight = canvasHeight;
+        this.jumpHeight = canvasHeight * 0.2;
+        this.player = new Player(canvasWidth / 2, canvasHeight / 2 - 50, canvasWidth, canvasHeight);
+        this.generateInitialPlatforms();  // Ensure platforms are generated
     }
-  
+
     generateInitialPlatforms() {
-      const platformConfigs = [
-        { y: this.canvasHeight - this.canvasHeight * 0.05, width: 0.1, height: 0.1 },
-        { y: this.canvasHeight - this.canvasHeight * 0.3, width: 0.2, height: 0.35 },
-        { y: this.canvasHeight - this.canvasHeight * 0.5, width: 0.3, height: 0.55 }
-      ];
-      for (let i = 0; i < platformConfigs.length; i++) {
-        const cfg = platformConfigs[i];
-        const platform = new BezierPlatform({
-          p1: { x: this.canvasWidth / 2 - this.canvasWidth * cfg.width, y: cfg.y },
-          p2: { x: this.canvasWidth / 2, y: cfg.y - this.canvasHeight * cfg.height },
-          p3: { x: this.canvasWidth / 2 + this.canvasWidth * cfg.width, y: cfg.y - this.canvasHeight * cfg.height },
-          p4: { x: this.canvasWidth / 2 + this.canvasWidth * (cfg.width + 0.1), y: cfg.y }
-        }, this.energy, this);
-        this.platforms.push(platform);
-      }
+        const platformConfigs = [
+            { y: this.canvasHeight - this.canvasHeight * 0.05, width: 0.1, height: 0.1 },
+            { y: this.canvasHeight - this.canvasHeight * 0.3, width: 0.2, height: 0.35 },
+            { y: this.canvasHeight - this.canvasHeight * 0.5, width: 0.3, height: 0.55 }
+        ];
+        for (let i = 0; i < platformConfigs.length; i++) {
+            const cfg = platformConfigs[i];
+            const platform = new BezierPlatform({
+                p1: { x: this.canvasWidth / 2 - this.canvasWidth * cfg.width, y: cfg.y },
+                p2: { x: this.canvasWidth / 2, y: cfg.y - this.canvasHeight * cfg.height },
+                p3: { x: this.canvasWidth / 2 + this.canvasWidth * cfg.width, y: cfg.y - this.canvasHeight * cfg.height },
+                p4: { x: this.canvasWidth / 2 + this.canvasWidth * (cfg.width + 0.1), y: cfg.y }
+            }, this.energy, this);
+            this.platforms.push(platform);
+        }
+        console.log(this.platforms); // Debugging: Check the platforms array
+    }
+
+    updatePlayer() {
+        this.player.update(this.platforms); // Passing platforms to player
+        this.player.display(this.cameraOffset);
     }
   
     update() {
@@ -70,11 +75,6 @@ const config = {
       for (let i = 0; i < this.platforms.length; i++) {
         this.platforms[i].display(i, this.cameraOffset);
       }
-    }
-  
-    updatePlayer() {
-      this.player.update(this.state, this.platforms);
-      this.player.display(this.cameraOffset);
     }
   
     generateNewPlatforms() {

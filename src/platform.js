@@ -49,7 +49,7 @@ class BezierPlatform {
       this.p4.display(color, cameraOffset, isCurrentPlatform);
     }
   
-    checkCollision(player) {
+    checkCollisions(player) {
         let playerBottom = player.pos.y + player.size / 2;
         let closestT = 0;
         let closestDist = Infinity;
