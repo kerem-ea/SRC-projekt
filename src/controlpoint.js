@@ -1,13 +1,30 @@
 class ControlPoint {
-    constructor() {
-        this.x = random(0, width);
-        this.y = random(0, height);
+    constructor(x, y, platform) {
+      this.pos = createVector(x, y);
+      this.platform = platform;
     }
-
-    static drawAllPoints(points) {
-        for (let i = 0; i < points.length; i++) {
-            fill(0, 255, 0);  
-            circle(points[i].x, points[i].y, width * 0.02);  
-        }
+  
+    updatePosition(x, y) {
+      this.pos.set(x, y);
+      this.platform.updatePoints();
     }
-}
+  
+    display(color, cameraOffset, isCurrentPlatform) {
+      const margin = this.platform.game.canvasHeight * 0.02;
+      let fillColor;
+      if (isCurrentPlatform) {
+        fillColor = color;
+      } else {
+        fillColor = color.map(c => c * 0.5);
+      }
+      fill(fillColor);
+      noStroke();
+      ellipse(this.pos.x, this.pos.y - cameraOffset, margin, margin);
+    }
+  
+    isMouseOver(cameraOffset) {
+      const margin = this.platform.game.canvasHeight * 0.02;
+      return dist(mouseX, mouseY + cameraOffset, this.pos.x, this.pos.y) < margin;
+    }
+  }
+  

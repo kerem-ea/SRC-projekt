@@ -1,43 +1,78 @@
 class Player {
-    constructor() {
-        this.x = width / 2;
-        this.y = height / 2;
-        this.size = width / 20; 
-        this.onPlatform = false;
-        this.color = config.playerColor;
-        this.speed = createVector(width * 0.02, width * 0.02); 
-        this.jumpPower = createVector(0, width * 0.05); 
-        this.gravity = createVector(0, width * 0.002); 
-        this.velocity = createVector(0, 0); 
+    constructor(x, y, canvasWidth, canvasHeight) {
+      this.pos = createVector(x, y);
+      this.vel = createVector(0, 0);
+      this.acc = createVector(0, 0);
+      this.size = canvasHeight * 0.05;
+      this.canvasWidth = canvasWidth;
+      this.canvasHeight = canvasHeight;
+      this.onGround = false;
     }
-
-    show() {
-        fill(this.color);
-        noStroke();
-        circle(this.x, this.y, this.size * config.gameSize); 
+  
+    update(state, platforms) {
+        this.acc.set(0, 1); 
+    
+        if (keyIsDown(LEFT_ARROW)) this.acc.x = -1;
+        if (keyIsDown(RIGHT_ARROW)) this.acc.x = 1;
+    
+        if (keyIsDown(UP_ARROW) && this.onGround) {
+            this.vel.y = -22;
+            this.onGround = false;
+        }
+    
+        this.vel.add(this.acc);
+        this.pos.add(this.vel);
+    
+        this.onGround = false;
+        for (let platform of platforms) {
+            if (platform.checkCollision(this)) {
+                this.onGround = true;
+                break;
+            }
+        }
+    
+        this.vel.x *= 0.9;
+    
+        this.pos.x = constrain(this.pos.x, 0, this.canvasWidth);
     }
-
-    move() {
-        if (keyIsDown(65)) this.x -= this.speed.x; // A 
-        if (keyIsDown(68)) this.x += this.speed.x; // D 
-        if (keyIsDown(87) && this.onPlatform) this.velocity.y = -this.jumpPower.y; // W 
-        if (keyIsDown(83)) this.y += this.speed.y; // S 
+    
+  
+    checkCollisions(platforms) {
+      for (let i = 0; i < platforms.length; i++) {
+        if (platforms[i].checkCollision(this)) {
+          return true;
+        }
+      }
+      return false;
     }
-
+  
+    updateMovement() {
+      if (keyIsDown(LEFT_ARROW)) {
+        this.acc.x = -1;
+      }
+      if (keyIsDown(RIGHT_ARROW)) {
+        this.acc.x = 1;
+      }
+      // Jump only if on the ground.
+      if (keyIsDown(UP_ARROW) && this.onGround) {
+        this.vel.y = -15;
+        this.onGround = false;
+      }
+    }
+  
     applyGravity() {
-        if (!this.onPlatform) {
-            this.velocity.add(this.gravity);
-        } else {
-            this.velocity.y = 0; 
-        }
-
-        this.y += this.velocity.y; 
-
-        if (this.y >= height - this.size / 2) {
-            this.onPlatform = true; 
-            this.y = height - this.size / 2; 
-        } else {
-            this.onPlatform = false; 
-        }
+      this.acc.y += 1.0;
     }
-}
+  
+    checkBoundaries() {
+      this.pos.x = constrain(this.pos.x, 0, this.canvasWidth);
+    }
+  
+    display(cameraOffset) {
+      push();
+      fill(0, 0, 255);
+      ellipse(this.pos.x, this.pos.y - cameraOffset, this.size);
+      pop();
+    }
+  }
+  
