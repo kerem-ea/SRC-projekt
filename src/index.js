@@ -8,7 +8,6 @@ const config = {
   class Game {
     constructor() {
         this.state = "playing";
-        this.energy = 100;
         this.floorCount = 0;
         this.cameraOffset = 0;
         this.dragging = null;
@@ -20,7 +19,7 @@ const config = {
         this.canvasHeight = canvasHeight;
         this.jumpHeight = canvasHeight * 0.2;
         this.player = new Player(canvasWidth / 2, canvasHeight / 2 - 50, canvasWidth, canvasHeight);
-        this.generateInitialPlatforms();  // Ensure platforms are generated
+        this.generateInitialPlatforms();  
     }
 
     generateInitialPlatforms() {
@@ -36,14 +35,13 @@ const config = {
                 p2: { x: this.canvasWidth / 2, y: cfg.y - this.canvasHeight * cfg.height },
                 p3: { x: this.canvasWidth / 2 + this.canvasWidth * cfg.width, y: cfg.y - this.canvasHeight * cfg.height },
                 p4: { x: this.canvasWidth / 2 + this.canvasWidth * (cfg.width + 0.1), y: cfg.y }
-            }, this.energy, this);
+            }, this);
             this.platforms.push(platform);
         }
-        console.log(this.platforms); // Debugging: Check the platforms array
     }
 
     updatePlayer() {
-        this.player.update(this.platforms); // Passing platforms to player
+        this.player.update(this.platforms); 
         this.player.display(this.cameraOffset);
     }
   
@@ -94,7 +92,7 @@ const config = {
         p2: { x: this.canvasWidth / 2 - random(this.canvasWidth * 0.1, this.canvasWidth * 0.3), y: newY - random(10, 30) },
         p3: { x: this.canvasWidth / 2 + random(this.canvasWidth * 0.1, this.canvasWidth * 0.3), y: newY - random(10, 30) },
         p4: { x: this.canvasWidth / 2 + random(this.canvasWidth * 0.1, this.canvasWidth * 0.3), y: newY }
-      }, this.energy, this);
+      }, this);
       this.platforms.push(platform);
     }
   
@@ -107,7 +105,6 @@ const config = {
     
     restart() {
       this.state = "playing";
-      this.energy = 100;
       this.floorCount = 0;
       this.cameraOffset = 0;
       this.initialize(this.canvasWidth, this.canvasHeight);
@@ -178,10 +175,10 @@ const config = {
   
   function handleKeyPress(game) {
     if (keyCode === 27) {
-      // Toggle pause.
+      // ESC til pause
       game.state = (game.state === "playing") ? "paused" : "playing";
     } else if (keyCode === 82) {
-      // "R" key to restart.
+      // "r" til restart
       game.restart();
     } 
   }

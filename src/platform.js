@@ -1,11 +1,10 @@
 class BezierPlatform {
-    constructor(points, initialEnergy, game) {
+    constructor(points, game) {
       this.game = game;
       this.p1 = new ControlPoint(points.p1.x, points.p1.y, this);
       this.p2 = new ControlPoint(points.p2.x, points.p2.y, this);
       this.p3 = new ControlPoint(points.p3.x, points.p3.y, this);
       this.p4 = new ControlPoint(points.p4.x, points.p4.y, this);
-      this.energy = initialEnergy;
       this.originalCenter = this.getBezierPoint(0.5);
       this.points = this.calculatePoints();
     }
@@ -103,4 +102,5 @@ class BezierPlatform {
   function lerpVec(v0, v1, t) {
     return createVector(lerp(v0.x, v1.x, t), lerp(v0.y, v1.y, t));
   }
+  
   
