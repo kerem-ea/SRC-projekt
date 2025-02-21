@@ -5,7 +5,6 @@ class Player {
       this.acc = createVector(0, 0); // Player acceleration
       this.size = canvasHeight * 0.05; // Player størrelse
       this.canvasWidth = canvasWidth; 
-      this.canvasHeight = canvasHeight;
       this.onGround = false; // Player onGround boolean
   }
 
@@ -34,7 +33,7 @@ class Player {
       }
 
       this.vel.x *= 0.9;
-      this.pos.x = constrain(this.pos.x, 0, this.canvasWidth);
+      this.pos.x = constrain(this.pos.x, 0 + this.size/2, this.canvasWidth - this.size/2); // Holder x-positionen af spilleren indefor skærmen
   }
   
     display(cameraOffset) {
